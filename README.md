@@ -311,47 +311,310 @@ nah.
 nah.
 
 ### 5. Elm Compiler
+
 ![alt text](https://github.com/tengkusyafiq/elm-me-gusta/blob/master/elmprogramming/elm-compiler.svg)
 
 Elm takes in multiple .elm files in our project and compiles them to a single .js file. So why do we have multiple .js files in the final build?
 
 The reason behind it is that the code for our application doesn’t need to be written 100% in Elm. Once you realize what a delightful language Elm is, you will be hard-pressed to write your code in anything else. But even then you can write only a portion of your application in Elm if you choose to do so.
 
+If you want to use Elm in js project little by little, see https://elm-lang.org/news/how-to-use-elm-at-work.
+
 ### 6. Elm Architecture
+
+Elm Architecture is a set of patterns and language features for managing the flow of data in a program.
+If you are coming to Elm from other languages such as JavaScript Ruby, or Python, you will notice that there is no separate framework for building applications in Elm. That’s because the Elm Architecture is baked into the language.
 
 ### 7. Elm Runtime
 
+The Elm runtime is a system designed to support the execution of programs written in the Elm programming language.
+
 ### 8. elm make
+
+We asked elm make to compile the code in our Elm file to JavaScript. If you look inside the elm.js file, you will realize that it contains thousands of lines of JavaScript code. But, wait a second — we didn’t write a ton of Elm code when we built our simple home page. It was barely fifteen lines of code.
+
+In terminal we use `elm make src/Homepage.elm --output elm.js` before.
+THen we import the output in index.html like below.
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    ...
+  </head>
+
+  <body>
+    . .
+    <script src="elm.js"></script>
+    . .
+  </body>
+</html>
+```
+
+We have to go through this process of creating a separate index.html file if we want to add any JavaScript code of our own or import a CSS file or use a Web Component in our app. But if we don’t want any of that, we can simply remove the --output flag. elm make will then automatically create an index.html file for us and put the compiled code in it. We don’t have to manually create that file like we did before. Go ahead and delete the beginning-elm/index.html file and run the following command from the beginning-elm directory in terminal.
+`elm make src/Homepage.elm`
+But it's best to stick with making our own html for best practice.
 
 ### 9. elm install
 
+To install package. If we look at our elm project folder, we have `elm.json`, which looks like React's `package.json`. This is where it keeps all of the package details installed for the project.
+Our project uses packages listed in `direct`. Some of those direct packages depend on other packages which are listed in `indirect`.
+`elm make` looks inside the elm.json file and automatically installs all packages listed as dependencies. Once the initial project is setup, we shouldn’t modify elm.json by hand. Instead, we should use the `elm install` command to download packages from the online catalog.
+
+For example, we need `elm/http`(making multiple HTTP requests to a server to retrieve data) package soon so let's install it.
+`elm install elm/http`
+It will install and update `elm.json` for you.
+
 ### 10. elm reactor
+
+Elm provides an interactive development tool called elm reactor that lets us see the result of our code instantly.
+Run `elm reactor` on the root project, open the localhost stated, navigate to the elm we are currently working on, `Homepage.elm` and you will see the web app WITHOUT CSS styling.
+As of this writing, elm reactor doesn’t support loading external CSS frameworks such as Bootstrap. It has other limitations too. For example, it lacks live reloading — a technique that reloads a page automatically when the underlying code changes — thus requiring us to refresh the page manually every time we make a small change to our code to see the result. We will take a look at `elm-live` soon for better productivity.
 
 ### 11. elm repl
 
+`elm repl` is a tool that lets us experiment with Elm. We will be using this tool extensively in the next chapter to learn the syntax and semantics of the Elm programming language. It's like running elm lines in command line, for learning etc., like you do when running python line directly in python command line.
+run `elm repl` and you can type such as math stuff eg:`42/7.5`,`pi`, and other expressions eg: `List.reverse [ "Next", "Stop", "Pottersville" ]`
+
 ### 12. Ellie
+
+Ellie also is good for learning if you want to code elm file online, like we did for our web app before offline.
+Go to https://ellie-app.com/new, paste `Homepage.elm` into elm section and `index.html` into html section.
+Ellie is good for trying a one-off experimental code. In addition to running simple programs, Ellie allows us to add Elm packages, work through compiler errors, and share our code with others. As of this writing, Ellie doesn’t provide a robust environment required for professional web application development. Hopefully, someday it will.
 
 ### 13. Conclusion
 
+bye.
+
 ## 3. Elm Language Basics
+
+Use elm repl to run simple elm code.
 
 ### 1. Simple Arithmetic
 
+Example:
+`1+2`
+`12-1`
+`41/10`
+`9*2`
+`42 * (200 - 8000)`
+
+`/` will give you the exact, `//` will give you the integer only like below.
+
+```elm
+> 5 / 2
+2.5 : Float
+
+> 5 // 2
+2 : Int
+```
+
+We can also write them in prefix style like below.
+
+```elm
+> (+) 1 2
+3
+
+> (-) 4534 789
+3745
+```
+
+For power:
+
+```elm
+> 2 ^ 3 ^ 2
+512
+
+> (2 ^ 3) ^ 2
+64
+```
+
+See more operators: https://elmprogramming.com/simple-arithmetic.html
+
 ### 2. Boolean
+
+1. || - Boolean or - returns true if at least one input is True.
+2. && - Boolean and - returns true only if both options are True.
+3. not - Boolean negation - returns the opposite value of the input.
+4. xor - Boolean exclusive-or - returns True if exactly one input is True.
+
+```elm
+> True || False
+True
+
+> False || False
+False
+
+> True && False
+False
+
+> True && True
+True
+
+> not True
+False
+
+> xor True False
+True
+
+> xor True True
+False
+
+> xor False False
+False
+```
+
+In elm lamnugage, `null` or `0` is not `False`, so you can't use them as such.
 
 ### 3. Comparison
 
+1.  == Equal
+2.  /= Not Equal
+3.  >     Greater than
+4.  < Less than
+5.  > = Greater than or equal to
+6.  <= Less than or equal to
+7.  max Find the larger of two
+8.  min Find the smaller of two
+
+Example:
+
+```elm
+> (5 == 5)
+True
+
+> 1 /= 2
+True
+
+> 10 < 7
+False
+
+> 100 > 99
+True
+
+> 7 >= 10
+False
+
+> 9 <= 9
+True
+
+> max 5 6
+6
+
+> min 3 8
+3
+```
+
 ### 4. Comments
+
+#### Single line
+
+```elm
+42 + 1 -- This is a single line comment and will be ignored by Elm.
+```
+
+#### Multi-line
+
+```elm
+{-| Negate a boolean value.
+
+    not True == False
+    not False == True
+-}
+not : Bool -> Bool
+not =
+    Elm.Kernel.Basics.not
+```
 
 ### 5. Expression
 
+`3` is a number.
+`x` is a symbol.
+`-` is an operator.
+`3x-5` is an expression.
+`3x-5=7` is an equation (expression = expression).
+
 ### 6. Value
+
+`3` is a number.
+`1.5` is a float.
+`c` is a character.
+`pretzels` is a string.
+`[ 1, 2, 3 ]` is a list.
+`{ a = 1, b = 2 }` is a record
+`( "first", "second" )` is a tuple
+`someFunction x = x + 1` is a function
 
 ### 7. Constant
 
+`x = (7 + 5) / 3` In this scenario, x can have only one value and that is 4. It can never change. It will remain 4 forever, until the end of time.
+
+Other thing, name your constant with camel case, eg: `firstName`
+
 ### 8. If Expression
 
+In elm, you must cover ALL of the possible way of outcomes, so is there is no `else`, it will throw an error.
+
+```elm
+> if velocity > 11.186 then "Godspeed" else "Come back"
+"Godspeed"
+```
+
+You also can do equation like below.
+
+```elm
+> whatToDo = if velocity > 11.186 then "Godspeed" else "Come back"
+"Godspeed"
+
+> whatToDo
+"Godspeed"
+```
+
+If you want to make a nested if, it is easier to write it in multi-line instead of one.
+
+```elm
+> velocity = 11
+11
+
+> speed = 7.67
+7.67
+
+> if velocity > 11.186 then \
+|     "Godspeed" \
+|   else if speed == 7.67 then \
+|     "Stay in orbit" \
+|   else \
+|     "Come back"
+"Stay in orbit"
+```
+
+Note that you don't need to type >, | and \(maybe) in command line.
+
 ### 9. Function
+
+you can put the expression before into a function like below to use it multiple times.
+
+```elm
+> escapeEarth myVelocity = \
+|   if myVelocity > 11.186 then \
+|     "Godspeed" \
+|   else \
+|     "Come back"
+<function>
+```
+
+Note that when writing the function body (if for example), you must use indentation.
+`escapeEarth` is the function name.
+`myVelocity` is the parameter.
+Once we create a function, we need to apply it to a value to get a desired output.
+Then you can use it like `escapeEarth 11.2` where `escapeEarth` is the function you want to use and `11.2` is the value of the parameter `myVelocity`.
+Also, you can save the answer of it in new constant like below.
+`whatToDo = escapeEarth 11.2`
+
+```
+Parameter vs Argument
+The terms parameter and argument are often used interchangeably although they are not the same. There is no harm in doing so, but just to clear things up, an argument is used to supply a value when applying the function (e.g. escapeEarth 11) whereas a parameter is used to hold onto that value in function definition (e.g. escapeEarth myVelocity).
+```
 
 ### 10. Let Expression
 
