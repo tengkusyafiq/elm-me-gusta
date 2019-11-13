@@ -611,10 +611,8 @@ Then you can use it like `escapeEarth 11.2` where `escapeEarth` is the function 
 Also, you can save the answer of it in new constant like below.
 `whatToDo = escapeEarth 11.2`
 
-```
 > Parameter vs Argument
->The terms parameter and argument are often used interchangeably although they are not the same. There is no harm in doing so, but just to clear things up, an argument is used to supply a value when applying the function (e.g. escapeEarth 11) whereas a parameter is used to hold onto that value in function definition (e.g. escapeEarth myVelocity).
-```
+> The terms parameter and argument are often used interchangeably although they are not the same. There is no harm in doing so, but just to clear things up, an argument is used to supply a value when applying the function (e.g. escapeEarth 11) whereas a parameter is used to hold onto that value in function definition (e.g. escapeEarth myVelocity).
 
 ### 10. Let Expression
 
