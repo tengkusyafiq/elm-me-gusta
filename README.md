@@ -311,6 +311,7 @@ nah.
 nah.
 
 ### 5. Elm Compiler
+![alt text](https://github.com/tengkusyafiq/elm-me-gusta/blob/master/elmprogramming/elm-compiler.svg)
 
 Elm takes in multiple .elm files in our project and compiles them to a single .js file. So why do we have multiple .js files in the final build?
 
