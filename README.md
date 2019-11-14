@@ -1085,10 +1085,12 @@ Extracting substring:
 
 # 2. [25 Elm Examples](https://github.com/bryanjenningz/25-elm-examples)
 
-[x] download the repo.
-[x] go through it one by one, test it yourself and make note.
+1. open the respected ellie.
+2. go through it one by one, and make note.
 
 ## 1. hello world 01
+
+Basic structure.
 
 ```elm
 -- This is how you write single-line comments in Elm.
@@ -1136,11 +1138,140 @@ text "Hello, World!"
 
 ## 2. hello world 02
 
+Exposing Html so that you can use it.
+
+```elm
+module Main exposing (main)
+
+-- We are now importing the Html type constructor from the Html module so that
+-- we can use it to annotate the main value's type.
+
+import Html exposing (Html, text)
+
+
+
+-- In Elm, we can explicitly say what any value's type is. Since the main value
+-- is just an HTML text node, it has the type (Html msg). If the value isn't
+-- that type, then we will get a compile error, which is helpful for
+-- guaranteeing our program is correct. Type declarations aren't required, but
+-- most people like writing type declarations so their code is easier to understand.
+
+
+main : Html msg
+main =
+    text "Hello, World!"
+```
+
+```html
+<html>
+  <head>
+    <style>
+      /* you can style your program here */
+    </style>
+  </head>
+  <body>
+    <main></main>
+    <script>
+      var app = Elm.Main.init({ node: document.querySelector("main") });
+      // you can use ports and stuff here
+    </script>
+  </body>
+</html>
+```
+
 ## 3. hello world 03
+
+Exposing the div function. Now you can write html with elm format.
+
+```elm
+module Main exposing (main)
+
+-- We are now exposing the div function.
+
+import Html exposing (Html, div, text)
+
+
+
+-- We've made it so the main value isn't just a text node anymore. It's now
+-- a div element with a text node as a child. The Html module has all the
+-- HTML elements you need. Each HTML element takes 2 arguments which are both
+-- lists. The first list is a list of attributes, the second list is a list of
+-- child HTML elements. We can nest elements the same way we normally do with
+-- HTML.
+
+
+main : Html msg
+main =
+    div [] [ text "Hello, World!" ]
+```
+
+```html
+<html>
+  <head>
+    <style>
+      /* you can style your program here */
+    </style>
+  </head>
+  <body>
+    <main></main>
+    <script>
+      var app = Elm.Main.init({ node: document.querySelector("main") });
+      // you can use ports and stuff here
+    </script>
+  </body>
+</html>
+```
 
 ## 4. hello world 04
 
+Using class.
+
+```elm
+module Main exposing (main)
+
+-- I'm importing the Html.Attributes module, which has all the HTML attributes
+-- we need. I'm exposing the class attribute, which we can use for adding classes
+-- to HTML elements.
+
+import Html exposing (Html, div, text)
+import Html.Attributes exposing (class)
+
+
+
+-- Now the main value has a div element which has a class of "text-center". Since
+-- we're using Bootstrap, this will make it so the child text node is centered. So
+-- now the "Hello, World!" message is centered.
+
+
+main : Html msg
+main =
+    div [ class "text-center" ] [ text "Hello, World!" ]
+```
+
+```html
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.css"
+    />
+    <style>
+      /* you can style your program here */
+    </style>
+  </head>
+  <body>
+    <main></main>
+    <script>
+      var app = Elm.Main.init({ node: document.querySelector("main") });
+      // you can use ports and stuff here
+    </script>
+  </body>
+</html>
+```
+
 ## 5. counter 05
+
+Now we get serious. 
 
 ## 6. counter 06
 
