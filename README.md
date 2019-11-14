@@ -1090,7 +1090,7 @@ Extracting substring:
 
 ## 1. hello world 01
 
-``elm
+```elm
 -- This is how you write single-line comments in Elm.
 {-
 This is how you
@@ -1115,24 +1115,24 @@ import Html exposing (text)
 main =
 text "Hello, World!"
 
-````
+```
 
 ```html
 <html>
-<head>
-  <style>
-    /* you can style your program here */
-  </style>
-</head>
-<body>
-  <main></main>
-  <script>
-    var app = Elm.Main.init({ node: document.querySelector('main') })
-    // you can use ports and stuff here
-  </script>
-</body>
+  <head>
+    <style>
+      /* you can style your program here */
+    </style>
+  </head>
+  <body>
+    <main></main>
+    <script>
+      var app = Elm.Main.init({ node: document.querySelector("main") });
+      // you can use ports and stuff here
+    </script>
+  </body>
 </html>
-````
+```
 
 ## 2. hello world 02
 
