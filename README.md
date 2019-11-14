@@ -1271,7 +1271,22 @@ main =
 
 ## 5. counter 05
 
-Now we get serious. 
+Now we get serious. Let's make the old school tutorial; counter.
+
+In import section, expose `sandbox` to allow us to write an interactive application instead of just static HTML like before, `button` element, and `onClick` to handle the button event.
+
+How we handle things in elm is just like redux in react.
+
+`Msg` will be all of the possible actions/message type. Let's make an increment first, so put it in Msg list.
+
+`Model` is where we put something we want to change soon. In this case, we call it `Int` which holds the counter value.
+
+`view` is where you write what to view. It will generate HTML from your model.
+
+`update` is where you write what to do after a action/message we put in `Msg`.
+
+How it flows generally in any situation:
+When the user clicks on the button, it produces a message(`Increment`). The message is piped into the `update` function, producing a new `model`. We use the `view` function to show the new `model` on the screen. Repeat.
 
 ## 6. counter 06
 
