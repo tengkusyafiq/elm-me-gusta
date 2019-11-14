@@ -588,7 +588,8 @@ If you want to make a nested if, it is easier to write it in multi-line instead 
 "Stay in orbit"
 ```
 
-Note that you don't need to type >, | and \(maybe) in command line.
+Note that you don't need to type >, | and \ in command line.
+We don’t need to add \ to the end of each line when we create a multi-line string in a file though.
 
 ### 9. Function
 
@@ -614,13 +615,369 @@ Also, you can save the answer of it in new constant like below.
 > **Parameter vs Argument:**
 > The terms parameter and argument are often used interchangeably although they are not the same. There is no harm in doing so, but just to clear things up, an argument is used to supply a value when applying the function (e.g. escapeEarth 11) whereas a parameter is used to hold onto that value in function definition (e.g. escapeEarth myVelocity).
 
+#### Function with multiple parameters
+
+THe function before only take one argument, right(we pass one number only)? Let's do it with multiple parameters so we can pass multiple arguments. Because we will write long codes, let's do it in our project instead of `elm repl`.
+Use `ctrl + D` to exit `elm repl`.
+
+> Please also name your file with camel case with uppercase first letter.
+
+Let's make file `Playground.elm`, and use codes below.
+
+```elm
+module Playground exposing (main)
+--make sure it has the same name as filename.
+
+import Html
+--import html module
+
+
+escapeEarth myVelocity mySpeed =
+    if myVelocity > 11.186 then
+        "Godspeed"
+
+    else if mySpeed == 7.67 then
+        "Stay in orbit"
+
+    else
+        "Come back"
+
+
+main =
+    Html.text (escapeEarth 11.2 7.2)
+```
+
+In example above we set 2 parameters after the function name like `escapeEarth myVelocity mySpeed = <function body>`.
+Then to pass the arguments, use `escapeEarth 11.2 7.2`.
+
+The last function is main. The execution of all Elm applications start with this function. It’s a regular function like any other. It just happens to be the entry-point for an application. We apply a function called Html.text to the result produced by yet another function application: `escapeEarth 11.2 7.2`. Html.text takes a string and displays it on a browser.
+
+To test it, run `elm reactor` like before and navigate to the elm file.
+
+Oh, also, you can use a function in another function like `multiply a b = a * b` then pass the argument like `multiply 3 4`.
+
+Let's try to apply it in our playground. Put codes below just above `main`.
+
+```elm
+computeSpeed distance time =
+    distance / time
+
+
+computeTime startTime endTime =
+    endTime - startTime
+```
+
+Then use this `main` instead:
+
+```elm
+main =
+    Html.text (escapeEarth 11 (computeSpeed 7.67 (computeTime 2 3)))
+```
+
+or a more readable one:
+
+```elm
+main =
+    computeTime 2 3
+        |> computeSpeed 7.67 --you can also pass only one argument even tho it has 2 parameters. Elm will see the argument passed as the first argument, and the second one will be taken next.
+        |> escapeEarth 11
+        |> Html.text
+```
+
+`|>`, or pipe operator (a.k.a. forward function application operator) made our code looks pretty. It pipes the result from previous expression to the next one. `computeSpeed 7.67` will take 1 from the previous result as the next argument. 7.67/1, this will equal to 7.67. It pass to `escapeEarth 11` as a second argument, so the result is "stay in orbit".
+
+`<|` is the backward off pipe operator (a.k.a. backward function application operator). Just read it backward.
+
 ### 10. Let Expression
+
+Often times, we want to define local constants and functions that we don’t want the rest of the code in our module to know about. We can define them inside a let expression. They won’t be visible outside the scope created by a let expression making them essentially private.
+`let` is used with `in`.
+
+```elm
+escapeEarth myVelocity mySpeed fuelStatus =
+    let
+        escapeVelocityInKmPerSec =
+            11.186
+
+        orbitalSpeedInKmPerSec =
+            7.67
+
+        whereToLand fuel =
+            if fuel == "low" then
+                "Land on droneship"
+
+            else
+                "Land on launchpad"
+    in
+    if myVelocity > escapeVelocityInKmPerSec then
+        "Godspeed"
+
+    else if mySpeed == orbitalSpeedInKmPerSec then
+        "Stay in orbit"
+
+    else
+        whereToLand fuelStatus
+
+main =
+    escapeEarth 10 6.7 "low"
+        |> Html.text
+```
+
+No code outside escapeEarth function can access the `escapeVelocityInKmPerSec` and `orbitalSpeedInKmPerSec` constants. Yuo can also put function in let to use locally.
+
+Please indent things inside `let`.
+Save the file and refresh the url.
 
 ### 11. Case Expression
 
+If you have so many conditions and want to match a pattern, better use `case`.
+Let's see the different in using `if` and `case`.
+Code below is using `if`.
+
+```elm
+weekday dayInNumber =
+    if dayInNumber == 0 then
+        "Sunday"
+
+    else if dayInNumber == 1 then
+        "Monday"
+
+    else if dayInNumber == 2 then
+        "Tuesday"
+
+    else if dayInNumber == 3 then
+        "Wednesday"
+
+    else if dayInNumber == 4 then
+        "Thursday"
+
+    else if dayInNumber == 5 then
+        "Friday"
+
+    else if dayInNumber == 6 then
+        "Saturday"
+
+    else
+        "Unknown day"
+
+main =
+    Html.text <| weekday 5
+```
+
+Code below is using `case`.
+
+```elm
+weekday dayInNumber =
+    case dayInNumber of
+        0 ->
+            "Sunday"
+
+        1 ->
+            "Monday"
+
+        2 ->
+            "Tuesday"
+
+        3 ->
+            "Wednesday"
+
+        4 ->
+            "Thursday"
+
+        5 ->
+            "Friday"
+
+        6 ->
+            "Saturday"
+
+        _ ->
+            "Unknown day"
+
+main =
+    Html.text <| weekday 5
+```
+
+Notice that we're using `_` as `else`. Paste the code above in playgound, you should have "Friday".
+
+You can also chain the case by adding code below, and edit the `main` as such.
+
+```elm
+hashtag dayInNumber =
+    case weekday dayInNumber of --take weekday result as argument
+        "Sunday" ->
+            "#SinDay"
+
+        "Monday" ->
+            "#MondayBlues"
+
+        "Tuesday" ->
+            "#TakeMeBackTuesday"
+
+        "Wednesday" ->
+            "#HumpDay"
+
+        "Thursday" ->
+            "#ThrowbackThursday"
+
+        "Friday" ->
+            "#FlashbackFriday"
+
+        "Saturday" ->
+            "#Caturday"
+
+        _ ->
+            "#Whatever"
+main =
+    Html.text <| hashtag 5
+```
+
+By passing `5` to `hashtag`, but `hashtag` will look in `weekday` first. Then the result would be new argument to look into the `hashtag` case. So the result flow will be this way, `5` > `Friday` > `#FlashbackFriday`.
+
 ### 12. Indentation
 
+`import` lines are optional. If they’re included, they’re listed right below the module definition. Both module and import lines must start at the left most column. The top-level function definitions are placed below the import lines. They too must start at the left most column.
+
+However, the module and import lines are separated with only one blank line. These spacing rules are enforced by elm-format.
+
+An if expression must be placed inside a function definition, otherwise Elm will throw an error.
+
+Indented with four spaces.
+
+The code inside the let area must be indented with at least one space, whereas the code inside the in area doesn’t need any indentation.
+
 ### 13. String
+
+One line string: `"Pretzels"`
+Multi-line string:
+
+```elm
+revelation =
+    """
+    It became very clear to me sitting out there today
+    that every decision I've made in my entire life has
+    been wrong. My life is the complete "opposite" of
+    everything I want it to be. Every instinct I have,
+    in every aspect of life, be it something to wear,
+    something to eat - it's all been wrong.
+    """
+```
+
+Try code above in playground with `main` below.
+
+```elm
+main =
+    Html.text revelation
+```
+
+To escape "" or '', use backslash like `\"` or `\'`:
+
+```elm
+> "Michael Scott's Rabies Awareness \"Fun Run\" Race for the Cure"
+"Michael Scott's Rabies Awareness \"Fun Run\" Race for the Cure"
+
+> '\''
+'\''
+```
+
+To escape the backslash itself, use itself lol:
+
+```elm
+> '\\'
+'\\'
+```
+
+To calculate length of a string:
+
+```elm
+> String.length "Creed Bratton"
+13
+```
+
+Optionally, you can import the String library.
+`import String exposing (length)`
+This way, we can just use `length` instead of `String.length`. But let's just stick to `String.length` because there is a `length` too in `List.length` module.
+
+To check emptiness of a string:
+
+```elm
+ > String.isEmpty ""
+True
+
+> String.isEmpty "Kevin Malone"
+False
+
+> String.length "Kevin Malone" == 0
+False
+```
+
+To combine strings, use `++`.
+
+```elm
+> "These pretzels are " ++ "makin' me thirsty!"
+"These pretzels are makin' me thirsty!"
+```
+
+To combine characters, convert to string first.
+
+```elm
+> (String.fromChar 'p') ++ (String.fromChar 'r')
+"pr"
+```
+
+You can also use `append`, `concat`, `join` to combine strings.
+
+To split a string, use `split`, which is the opposite of `join`:
+
+```elm
+> String.split " " "Bears. Beats. Battlestar Gallactica."
+["Bears.","Beats.","Battlestar","Gallactica."]
+```
+
+Code above will split every space character found.
+
+To filter a string:
+Let say, some user fill in the IC number in the database with dash(-) character, makes our database cannot read the numbers. So we need to filter out every dash character when reading the IC number database. We can use `String.filter` but we can't use right away. We need to use it like below.
+
+```elm
+> String.filter (\char -> char /= '-') "222-11-5555"
+"222115555"
+```
+
+Changing case of a string:
+
+```elm
+> String.toUpper "I declare bankruptcy!"
+"I DECLARE BANKRUPTCY!"
+
+> String.toLower "Shhh. Be quiet."
+"shhh. be quiet."
+```
+
+To trim unnecessary whitespaces:
+
+```elm
+> String.trim "    A band of backwoods mail-hating survivalists   \n"
+"A band of backwoods mail-hating survivalists"
+```
+
+To find somethiung in string:
+
+```elm
+> String.contains "belie" "It’s not a lie if you believe it."
+True
+```
+
+Note that it is case sensitive.
+
+Extracting substring:
+
+```elm
+> String.slice 0 5 "Bears. Beets. Battlestar Galactica."
+"Bears"
+
+> String.slice -21 -1 "Bears. Beets. Battlestar Galactica."
+"Battlestar Galactica" : String
+```
 
 ### 14. Regular Expression
 
@@ -733,6 +1090,50 @@ Also, you can save the answer of it in new constant like below.
 
 ## 1. hello world 01
 
+``elm
+-- This is how you write single-line comments in Elm.
+{-
+This is how you
+write multi-line comments
+in Elm.
+-}
+-- This is how you declare what your module name is and what values it exports.
+-- We've chosen to name our module Main and we are exporting the value main that
+-- we have defined below.
+
+module Main exposing (main)
+
+-- We're importing the Html module the text value available in our file, so we
+-- can just reference it if we want.
+
+import Html exposing (text)
+
+-- The main value manages what gets displayed on the page. If we set the main
+-- value to (text "Hello, World!"), then a text node with the string "Hello, World!"
+-- will display on the page.
+
+main =
+text "Hello, World!"
+
+````
+
+```html
+<html>
+<head>
+  <style>
+    /* you can style your program here */
+  </style>
+</head>
+<body>
+  <main></main>
+  <script>
+    var app = Elm.Main.init({ node: document.querySelector('main') })
+    // you can use ports and stuff here
+  </script>
+</body>
+</html>
+````
+
 ## 2. hello world 02
 
 ## 3. hello world 03
@@ -780,3 +1181,16 @@ Also, you can save the answer of it in new constant like below.
 ## 24. filter to-dos 24
 
 ## 25. navigation to-dos 25
+
+# Troubleshoots
+
+## 1. Upgrading project from 0.19.0 to 0.19.1
+
+https://github.com/elm/compiler/blob/master/docs/upgrade-instructions/0.19.1.md
+You just change the version in elm.json to 0.19.1. That's all.
+
+In this new version also, you need to name the file name as the same as the module name.
+
+```
+
+```
